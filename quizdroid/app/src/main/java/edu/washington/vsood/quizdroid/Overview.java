@@ -30,6 +30,8 @@ public class Overview extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), Question.class);
                 intent.putExtra("question", 1);
+                intent.putExtra("isAnswer", 0);
+                intent.putExtra("selectedAnswer", 0);
                 intent.putExtra("correct", 0);
                 startActivity(intent);
             }
