@@ -15,7 +15,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Overview"></activity>
+        <activity android:name=".Overview" />
+        <activity android:name=".Question"></activity>
     </application>
 
 </manifest>
