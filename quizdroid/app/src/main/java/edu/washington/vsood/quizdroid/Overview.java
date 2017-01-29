@@ -29,6 +29,8 @@ public class Overview extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), Question.class);
+                intent.putExtra("question", 1);
+                intent.putExtra("correct", 0);
                 startActivity(intent);
             }
         });
@@ -40,15 +42,15 @@ public class Overview extends AppCompatActivity {
         if (topic.equals("Math")) {
             des.setText("You have chosen the Math topic. In this topic you will be asked about simple " +
                     "Math questions like addition, subtraction, multiplication and division!");
-            questions.setText("There are 10 questions in this section.");
+            questions.setText("There are 3 questions in this section.");
         } else if (topic.equals("Physics")) {
             des.setText("You have chosen the Physics topic. In this topic you will be asked about simple " +
                     "Physics questions like random equations and definitions!");
-            questions.setText("There are 5 questions in this section.");
+            questions.setText("There are 3 questions in this section.");
         } else {
             des.setText("You have chosen the Marvel Super Heroes topic. In this topic you will be asked " +
                     "about simple Super Hero questions regarding different comic book characters");
-            questions.setText("There are 7 questions in this section.");
+            questions.setText("There are 3 questions in this section.");
 
         }
 
