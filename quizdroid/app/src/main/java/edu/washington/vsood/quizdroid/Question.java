@@ -32,12 +32,20 @@ public class Question extends AppCompatActivity {
         RadioButton c = (RadioButton) findViewById(R.id.c);
         RadioButton d = (RadioButton) findViewById(R.id.d);
 
+
         Bundle bundle = getIntent().getExtras();
         QuestionNumber = bundle.getInt("question");
         CorrectAnswers = bundle.getInt("correct");
         isAnswer = bundle.getInt("isAnswer");
         SelectedAnswer = bundle.getInt("selectedAnswer");
 
+        if (isAnswer == 1) {
+            a.setEnabled(false);
+            b.setEnabled(false);
+            c.setEnabled(false);
+            d.setEnabled(false);
+
+        }
         if (isAnswer == 1 && QuestionNumber != 3) {
             submitButton.setVisibility(View.VISIBLE);
             submitButton.setText("NEXT");
