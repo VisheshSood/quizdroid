@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         AdapterView.OnItemClickListener clickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Intent intent = new Intent(view.getContext(), Overview.class);
+                Intent intent = new Intent(view.getContext(), OverviewQuestionAnswerActivity.class);
                 String topic = (String) adapterView.getItemAtPosition(position);
                 intent.putExtra("message", topic);
                 startActivity(intent);

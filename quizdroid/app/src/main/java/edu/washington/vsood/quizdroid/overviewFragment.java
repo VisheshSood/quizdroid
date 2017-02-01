@@ -1,26 +1,48 @@
 package edu.washington.vsood.quizdroid;
 
-import android.content.Intent;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Overview extends AppCompatActivity {
+public class overviewFragment extends Fragment {
+
+    private Activity hostActivity;
+    private String topic;
+
+    public overviewFragment() {
+        // Required empty public constructor
+    }
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overview);
+        if(getArguments() != null) {
+            topic = getArguments().getString("message");
+        }
 
-        Bundle bundle = getIntent().getExtras();
-        String topic = bundle.getString("message");
+        hostActivity = getActivity();
 
-        Button begin = (Button) findViewById(R.id.begin);
-        TextView heading = (TextView) findViewById(R.id.topic);
-        TextView description = (TextView) findViewById(R.id.topic_description);
-        TextView questions = (TextView) findViewById(R.id.question_count);
+    }
+
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.fragment_overview, container, false);
+
+        Button begin = (Button) rootView.findViewById(R.id.fragment_begin);
+        TextView heading = (TextView) rootView.findViewById(R.id.fragment_topic);
+        TextView description = (TextView) rootView.findViewById(R.id.fragment_topic_description);
+        TextView questions = (TextView) rootView.findViewById(R.id.fragment_question_count);
 
         heading.setText(topic);
         initializeDescriptionAndQuestions(topic, description, questions);
@@ -28,14 +50,13 @@ public class Overview extends AppCompatActivity {
         begin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), Question.class);
-                intent.putExtra("question", 1);
-                intent.putExtra("isAnswer", 0);
-                intent.putExtra("selectedAnswer", 0);
-                intent.putExtra("correct", 0);
-                startActivity(intent);
+                if(hostActivity instanceof OverviewQuestionAnswerActivity) {
+                    ((OverviewQuestionAnswerActivity) hostActivity).loadQuestionFragment(1, 0, 0, 0);
+                }
             }
         });
+
+        return rootView;
 
     }
 
@@ -57,4 +78,14 @@ public class Overview extends AppCompatActivity {
         }
 
     }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+
+    }
+
+
 }
