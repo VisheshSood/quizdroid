@@ -55,4 +55,16 @@ public class QuizApp extends Application {
    public ObtainRepository getRepo() {
        return repo;
    }
+
+    public void setInterval (int interval) {
+        this.interval = interval;
+    }
+
+    public void setUrl(String url) {
+        URL = url;
+    }
+
+    public String getUrl() {
+        return URL;
+    }
 }

@@ -1,10 +1,13 @@
 package edu.washington.vsood.quizdroid;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +22,8 @@ public class MainActivity extends AppCompatActivity  {
 
     public static List<Topic> topics;
     public ListView listView;
+    public String URL;
+    public int interval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,59 @@ public class MainActivity extends AppCompatActivity  {
         listView.setOnItemClickListener(clickListener);
 
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                preferences();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1) {
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+            URL = sharedPrefs.getString("location", "http://tednewardsandbox.site44.com/questions.json");
+            interval = Integer.parseInt(sharedPrefs.getString("minutes", "10"));
+            if (URL != null) {
+                if (URL.equals("")) {
+                    URL = "http://tednewardsandbox.site44.com/questions.json";
+                }
+            }
+            QuizApp.getInstance().setUrl(URL);
+            QuizApp.getInstance().setInterval(interval);
+        }
+        update();
+    }
+
+    private void preferences() {
+        Intent prefs = new Intent(getApplicationContext(), edu.washington.vsood.quizdroid.Preferences.class);
+        startActivityForResult(prefs, 1);
+    }
+
+
+    public void update() {
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+
 
 
 
@@ -92,10 +150,6 @@ public class MainActivity extends AppCompatActivity  {
             intent.putExtra("message", getAdapterPosition());
             startActivity(intent);
         }
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return false;
     }
 
 }
