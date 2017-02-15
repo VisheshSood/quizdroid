@@ -1,6 +1,12 @@
 package edu.washington.vsood.quizdroid;
 
+import android.app.AlarmManager;
 import android.app.Application;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -19,6 +25,10 @@ public class QuizApp extends Application {
     private static ObtainRepository repo;
     public String URL;
     public int interval;
+    private AlarmManager am;
+    private PendingIntent pi;
+
+
 
 
     public QuizApp()
@@ -48,6 +58,25 @@ public class QuizApp extends Application {
             URL = "http://tednewardsandbox.site44.com/questions.json";
         }
 
+        am = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                Intent downloadServiceIntent = new Intent(context, ObtainRepository.class);
+                context.startService(downloadServiceIntent);
+
+                Toast.makeText(QuizApp.this, URL, Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        registerReceiver(alarmReceiver, new IntentFilter("edu.washington.vsood.checkJSON"));
+        Intent intent = new Intent();
+        intent.setAction("edu.washington.vsood.checkJSON");
+        pi = PendingIntent.getBroadcast(this, 0, intent, 0);
+        startAlarm(interval, URL);
+
         Toast.makeText(getApplicationContext(), "Downloading topics, please wait.", Toast.LENGTH_LONG).show();
         repo = new ObtainRepository();
     }
@@ -67,4 +96,13 @@ public class QuizApp extends Application {
     public String getUrl() {
         return URL;
     }
+
+    public void startAlarm(int interval, String url) {
+        this.interval = interval * 60000; //converts milliseconds to minutes
+        URL = url;
+
+        am.setRepeating(AlarmManager.RTC, System.currentTimeMillis(), this.interval,
+                pi);
+    }
+
 }
