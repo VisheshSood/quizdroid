@@ -6,25 +6,42 @@ import android.support.v7.app.AppCompatActivity;
 public class OverviewQuestionAnswerActivity extends AppCompatActivity {
 
     private String topic;
+    private Topic Topic;
+    private int QuestionNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview_question_answer);
 
+
+
+        Bundle bundle = getIntent().getExtras();
+        int val = bundle.getInt("message", -1);
+        Topic = QuizApp.getInstance().getRepo().getTopics().get(val);
+        topic = Topic.getTitle();
+        QuestionNumber = Topic.getQuestions().size();
+
+        loadOverViewFragment();
+
+
+    }
+
+
+
+    public void loadOverViewFragment() {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
 
-        Bundle bundle = getIntent().getExtras();
-        topic = bundle.getString("message");
+        Bundle overviewBundle = new Bundle();
+        overviewBundle.putString("topic", topic);
+        overviewBundle.putInt("qNumber", QuestionNumber);
+        overviewFragment overview = new overviewFragment(Topic);
+        overview.setArguments(overviewBundle);
 
-        overviewFragment of = new overviewFragment();
-        of.setArguments(bundle);
-        //ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
-        ft.add(R.id.overview_fragment, of);
+        ft.replace(R.id.overview_fragment, overview);
         ft.commit();
-
 
     }
 
@@ -40,7 +57,7 @@ public class OverviewQuestionAnswerActivity extends AppCompatActivity {
         questionBundle.putInt("selectedAnswer", selected);
         questionBundle.putInt("isAnswer", isAnswer);
 
-        questionFragment qf = new questionFragment();
+        questionFragment qf = new questionFragment(Topic);
         qf.setArguments(questionBundle);
 
         //ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
@@ -48,7 +65,8 @@ public class OverviewQuestionAnswerActivity extends AppCompatActivity {
         ft.commit();
     }
 
-    public void loadAnswerFragment(int qNumber, int correct, int selected, int isAnswer) {
+    public void loadAnswerFragment(int qNumber, int correct, int selected, int actual, int isAnswer,
+                                   String questionText, String a, String b, String c, String d, int total) {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
@@ -57,12 +75,20 @@ public class OverviewQuestionAnswerActivity extends AppCompatActivity {
         questionBundle.putInt("questions", qNumber);
         questionBundle.putInt("correct", correct);
         questionBundle.putInt("selectedAnswer", selected);
+        questionBundle.putInt("actualAnswer", actual);
         questionBundle.putInt("isAnswer", isAnswer);
+        questionBundle.putString("questionText", questionText);
+        questionBundle.putString("a", a);
+        questionBundle.putString("b", b);
+        questionBundle.putString("c", c);
+        questionBundle.putString("d", d);
+        questionBundle.putInt("total", total);
+
+
 
         answerFragment af = new answerFragment();
         af.setArguments(questionBundle);
 
-        //ft.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         ft.replace(R.id.overview_fragment, af);
         ft.commit();
     }

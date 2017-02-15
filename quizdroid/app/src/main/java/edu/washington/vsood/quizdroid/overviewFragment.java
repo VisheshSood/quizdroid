@@ -12,11 +12,18 @@ import android.widget.TextView;
 
 public class overviewFragment extends Fragment {
 
-    private Activity hostActivity;
-    private String topic;
+    public Activity hostActivity;
+    public String topic;
+    public Topic selectedTopic;
+    public int QuestionNumber;
+
 
     public overviewFragment() {
-        // Required empty public constructor
+
+    }
+
+    public overviewFragment(Topic selected) {
+        selectedTopic = selected;
     }
 
 
@@ -24,7 +31,8 @@ public class overviewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            topic = getArguments().getString("message");
+            topic = getArguments().getString("topic");
+            QuestionNumber = getArguments().getInt("qNumber");
         }
 
         hostActivity = getActivity();
@@ -44,8 +52,9 @@ public class overviewFragment extends Fragment {
         TextView description = (TextView) rootView.findViewById(R.id.fragment_topic_description);
         TextView questions = (TextView) rootView.findViewById(R.id.fragment_question_count);
 
-        heading.setText(topic);
-        initializeDescriptionAndQuestions(topic, description, questions);
+        heading.setText(topic + " Overview");
+        description.setText(selectedTopic.getLong());
+        questions.setText("There are " + QuestionNumber + " questions in this section.");
 
         begin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,24 +69,7 @@ public class overviewFragment extends Fragment {
 
     }
 
-    private void initializeDescriptionAndQuestions(String topic, TextView des, TextView questions) {
 
-        if (topic.equals("Math")) {
-            des.setText("You have chosen the Math topic. In this topic you will be asked about simple " +
-                    "Math questions like addition, subtraction, multiplication and division!");
-            questions.setText("There are 3 questions in this section.");
-        } else if (topic.equals("Physics")) {
-            des.setText("You have chosen the Physics topic. In this topic you will be asked about simple " +
-                    "Physics questions like random equations and definitions!");
-            questions.setText("There are 3 questions in this section.");
-        } else {
-            des.setText("You have chosen the Marvel Super Heroes topic. In this topic you will be asked " +
-                    "about simple Super Hero questions regarding different comic book characters");
-            questions.setText("There are 3 questions in this section.");
-
-        }
-
-    }
 
 
     @Override

@@ -22,14 +22,21 @@ public class questionFragment extends Fragment {
     public int CorrectAnswers;
     public String SubmittedAnswer;
     public int SelectedAnswer;
+    public int ActualAnswer;
     public int isAnswer;
+    private Topic Topics;
+    private Question QuestionList;
+
+
 
 
     public questionFragment() {
         // Required empty public constructor
     }
 
-
+    public questionFragment(Topic topics) {
+        Topics = topics;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,7 @@ public class questionFragment extends Fragment {
             CorrectAnswers = getArguments().getInt("correct");
             SelectedAnswer = getArguments().getInt("selectedAnswer");
             isAnswer = getArguments().getInt("isAnswer");
+            QuestionList = Topics.getQuestions().get(QuestionNumber-1);
 
         }
         hostActivity = getActivity();
@@ -68,69 +76,43 @@ public class questionFragment extends Fragment {
         d.setEnabled(true);
 
 
-
         submitButton.setText("Submit");
         submitButton.setVisibility(View.INVISIBLE);
 
 
         final TextView question = (TextView) rootView.findViewById(R.id.question);
 
-        if (QuestionNumber == 1) {
-            question.setText("What is 5 X 2?");
-            a.setText("10");
-            b.setText("6");
-            c.setText("4");
-            d.setText("8");
-
-
-        } else if (QuestionNumber == 2) {
-            question.setText("What is 5 + 3?");
-            a.setText("9");
-            b.setText("8");
-            c.setText("10");
-            d.setText("11");
-
-
-        } else {
-            question.setText("What is 60 / 3?");
-            a.setText("15");
-            b.setText("20");
-            c.setText("18");
-            d.setText("17");
-
-
-        }
+        question.setText(QuestionList.getQuestion());
+        a.setText(QuestionList.getOption1());
+        b.setText(QuestionList.getOption2());
+        c.setText(QuestionList.getOption3());
+        d.setText(QuestionList.getOption4());
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                char ch = 'h';
                 if (isAnswer == 0) {
-                    if (QuestionNumber == 1) {
-                        if (SubmittedAnswer.toLowerCase().equals("a")) {
-                            CorrectAnswers++;
-                        }
-                    } else if (QuestionNumber == 2) {
-                        if (SubmittedAnswer.toLowerCase().equals("b")) {
-                            CorrectAnswers++;
-                        }
-                    } else {
-                        if (SubmittedAnswer.toLowerCase().equals("b")) {
-                            CorrectAnswers++;
-                        }
+                    char answer = SubmittedAnswer.toLowerCase().charAt(0);
+                    int pos = answer - 'a' +1;
+                    ActualAnswer = QuestionList.getAnswer();
+                    if (pos == ActualAnswer) {
+                        CorrectAnswers++;
                     }
                 }
 
                 int nextQuestion = QuestionNumber;
 
-                if (nextQuestion <= 3) {
+                if (nextQuestion <= Topics.getQuestions().size()) {
                     if (hostActivity instanceof OverviewQuestionAnswerActivity) {
-                        ((OverviewQuestionAnswerActivity) hostActivity).loadAnswerFragment(nextQuestion, CorrectAnswers, SelectedAnswer, 1);
+                        ((OverviewQuestionAnswerActivity) hostActivity).loadAnswerFragment(
+                                nextQuestion, CorrectAnswers, SelectedAnswer, ActualAnswer, 1,
+                                QuestionList.getQuestion(), QuestionList.getOption1(),
+                                QuestionList.getOption2(), QuestionList.getOption3(), QuestionList.getOption4(),
+                                Topics.getQuestions().size());
                     }
 
-                } else if (nextQuestion > 3) {
-                    Intent intent = new Intent(view.getContext(), MainActivity.class);
-                    startActivity(intent);
                 }
 
             }
@@ -144,12 +126,8 @@ public class questionFragment extends Fragment {
                 SubmittedAnswer = getResources().getResourceEntryName(checkedId);
                 SelectedAnswer = checkedId;
                 submitButton.setText("Submit");
-
             }
         });
-
-
-
         return rootView;
     }
 
