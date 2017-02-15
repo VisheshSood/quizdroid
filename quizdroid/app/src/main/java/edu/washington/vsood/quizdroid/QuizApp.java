@@ -67,7 +67,7 @@ public class QuizApp extends Application {
                 Intent downloadServiceIntent = new Intent(context, ObtainRepository.class);
                 context.startService(downloadServiceIntent);
 
-                Toast.makeText(QuizApp.this, URL, Toast.LENGTH_SHORT).show();
+                Toast.makeText(QuizApp.this, "Downloading from " + URL, Toast.LENGTH_SHORT).show();
             }
         };
 
