@@ -63,11 +63,10 @@ public class QuizApp extends Application {
         BroadcastReceiver alarmReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-
+                Toast.makeText(QuizApp.this, "Downloading from " + URL, Toast.LENGTH_SHORT).show();
                 Intent downloadServiceIntent = new Intent(context, ObtainRepository.class);
                 context.startService(downloadServiceIntent);
 
-                Toast.makeText(QuizApp.this, "Downloading from " + URL, Toast.LENGTH_SHORT).show();
             }
         };
 

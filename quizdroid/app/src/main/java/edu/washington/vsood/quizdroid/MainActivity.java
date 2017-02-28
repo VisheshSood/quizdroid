@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity  {
 
 
     public void update() {
+        QuizApp.getInstance().startAlarm(interval, URL);
 
     }
 
