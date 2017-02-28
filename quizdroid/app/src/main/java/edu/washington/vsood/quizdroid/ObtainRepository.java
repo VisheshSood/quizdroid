@@ -23,13 +23,12 @@ public class ObtainRepository implements TopicRepository {
     private String url;
 
     public ObtainRepository() {
-
     }
 
     public void obtainData(Activity activity) {
-        if (TOPICSLIST.size() > 0) {
-            return;
-        }
+//        if (TOPICSLIST.size() > 0) {
+//            return;
+//        }
         TOPICSLIST = new ArrayList<Topic>();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         url = prefs.getString("location", "https://tednewardsandbox.site44.com/questions.json");

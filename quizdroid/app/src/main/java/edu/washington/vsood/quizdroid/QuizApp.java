@@ -28,9 +28,6 @@ public class QuizApp extends Application {
     private AlarmManager am;
     private PendingIntent pi;
 
-
-
-
     public QuizApp()
     {
         if (singleton == null)
